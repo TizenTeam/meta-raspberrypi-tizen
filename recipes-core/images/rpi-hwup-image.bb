@@ -46,6 +46,7 @@ CORE_IMAGE_BASE_INSTALL += "bash"
 CORE_IMAGE_BASE_INSTALL += "psmisc"
 CORE_IMAGE_BASE_INSTALL += "coreutils"
 CORE_IMAGE_BASE_INSTALL += "procps"
+CORE_IMAGE_BASE_INSTALL += "sshd"
 
 # Fonts
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-ttf"
