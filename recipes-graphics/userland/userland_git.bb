@@ -11,11 +11,14 @@ PROVIDES = "virtual/libgles2 \
             virtual/egl"
 COMPATIBLE_MACHINE = "raspberrypi"
 
+RREPLACES_${PN} = "libgles2 egl"
+
 SRCBRANCH = "master"
 SRCFORK = "raspberrypi"
 SRCREV = "3b81b91c18ff19f97033e146a9f3262ca631f0e9"
 
 SRC_URI = "git://github.com/${SRCFORK}/userland.git;protocol=git;branch=${SRCBRANCH} \
+	   file://rpi-userland-000-add-pkgconfig-files.patch \
           "
 S = "${WORKDIR}/git"
 
