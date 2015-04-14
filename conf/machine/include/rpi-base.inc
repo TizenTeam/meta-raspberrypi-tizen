@@ -49,3 +49,17 @@ MACHINE_EXTRA_RRECOMMENDS += " kernel-modules"
 SPLASH = "psplash-raspberrypi"
 
 IMAGE_BOOT_FILES ?= "bcm2835-bootfiles/* ${KERNEL_IMAGETYPE};${SDIMG_KERNELIMAGE}"
+
+# Set preferred providers
+PREFERRED_PROVIDER_virtual/egl ?= "userland"
+PREFERRED_PROVIDER_virtual/libgles2 ?= "userland"
+PREFERRED_PROVIDER_virtual/libgl ?= "mesa-gl"
+PREFERRED_PROVIDER_virtual/mesa ?= "mesa-gl"
+PREFERRED_PROVIDER_jpeg ?= "jpeg"
+
+PREFERRED_PROVIDER_vconf ?= "vconf"
+PREFERRED_PROVIDER_vconf-native ?= "vconf-native"
+PREFERRED_PROVIDER_libpam-native ?= "libpam-native"
+
+#DISTRO_FEATURES_remove ?= "wayland-egl mesa mesa-megadriver"
+
