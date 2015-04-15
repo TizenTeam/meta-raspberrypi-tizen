@@ -50,10 +50,18 @@ CORE_IMAGE_BASE_INSTALL += "weston-common-tz-launcher"
 CORE_IMAGE_BASE_INSTALL += "weston-common-config"
 CORE_IMAGE_BASE_INSTALL += "desktop-skin"
 CORE_IMAGE_BASE_INSTALL += "packagegroup-tizen-gstreamer"
-CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly"
 
 # Fonts
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-ttf"
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-pango"
 
 export SYSROOT = "${IMAGE_ROOTFS}"
+
+# Set root password to "root"
+ROOTFS_POSTPROCESS_COMMAND += "set_root_passwd;"
+set_root_passwd() {
+   sed 's%^root:[^:]*:%root:wYNffsf6sozwE:%' \
+       < ${IMAGE_ROOTFS}/etc/shadow \
+       > ${IMAGE_ROOTFS}/etc/shadow.new;
+   mv ${IMAGE_ROOTFS}/etc/shadow.new ${IMAGE_ROOTFS}/etc/shadow ;
+}
