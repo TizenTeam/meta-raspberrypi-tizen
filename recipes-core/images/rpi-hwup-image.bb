@@ -50,6 +50,7 @@ CORE_IMAGE_BASE_INSTALL += "weston-common-tz-launcher"
 CORE_IMAGE_BASE_INSTALL += "weston-common-config"
 CORE_IMAGE_BASE_INSTALL += "desktop-skin"
 CORE_IMAGE_BASE_INSTALL += "packagegroup-tizen-gstreamer"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly"
 
 # Fonts
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-ttf"
