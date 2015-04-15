@@ -51,6 +51,16 @@ CORE_IMAGE_BASE_INSTALL += "weston-common-config"
 CORE_IMAGE_BASE_INSTALL += "desktop-skin"
 CORE_IMAGE_BASE_INSTALL += "packagegroup-tizen-gstreamer"
 
+# Multimedia
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-meta-base"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-meta-audio"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-meta-video"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-meta-debug"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-good-meta"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-base-meta"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-ugly-meta"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-bad-meta"
+
 # Fonts
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-ttf"
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-pango"
