@@ -60,6 +60,7 @@ CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-good-meta"
 CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-base-meta"
 CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-ugly-meta"
 CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-plugins-bad-meta"
+CORE_IMAGE_BASE_INSTALL += "gstreamer1.0-libav"
 
 # Fonts
 CORE_IMAGE_EXTRA_INSTALL += "packagegroup-tizen-fonts-ttf"
