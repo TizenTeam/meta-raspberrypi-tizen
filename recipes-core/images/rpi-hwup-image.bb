@@ -27,6 +27,7 @@ CORE_IMAGE_BASE_INSTALL += "${TLMCONFIG}"
 
 
 # Removed x86 mesa-specific stuff
+CORE_IMAGE_BASE_INSTALL += "mesa-megadriver"
 CORE_IMAGE_BASE_INSTALL += "gum-utils"
 CORE_IMAGE_BASE_INSTALL += "meta-common"
 CORE_IMAGE_BASE_INSTALL += "pam"
@@ -42,7 +43,6 @@ CORE_IMAGE_BASE_INSTALL += "coreutils"
 CORE_IMAGE_BASE_INSTALL += "procps"
 
 # Our specific packages
-CORE_IMAGE_BASE_INSTALL += "userland"
 CORE_IMAGE_BASE_INSTALL += "v4l-utils"
 
 # From meta-tizen/meta-tizen-common-base/recipes-image/images/tizen-common-core-image-minimal.bb
