@@ -17,6 +17,8 @@ PR = "r4"
 
 inherit deploy
 
+DISABLE_OVERSCAN = "1"
+
 do_deploy() {
     install -d ${DEPLOYDIR}/bcm2835-bootfiles
 
@@ -66,6 +68,9 @@ do_deploy() {
         echo "# Enable offline compositing" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
         echo "dispmanx_offline=1" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
     fi
+
+    echo "avoid_warnings=2" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+    echo "mask_gpu_interrupt0=0x400" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
 }
 
 addtask deploy before do_package after do_install
