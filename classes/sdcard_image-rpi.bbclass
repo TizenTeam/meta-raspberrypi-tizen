@@ -39,7 +39,7 @@ SDIMG_KERNELIMAGE_raspberrypi2 ?= "kernel7.img"
 BOOTDD_VOLUME_ID ?= "${MACHINE}"
 
 # Boot partition size [in KiB] (will be rounded up to IMAGE_ROOTFS_ALIGNMENT)
-BOOT_SPACE ?= "20480"
+BOOT_SPACE ?= "40960"
 
 # Set alignment to 4MB [in KiB]
 IMAGE_ROOTFS_ALIGNMENT = "4096"
