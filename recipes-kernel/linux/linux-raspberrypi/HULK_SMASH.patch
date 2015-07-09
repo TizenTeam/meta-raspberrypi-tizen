@@ -62,3 +62,15 @@ index 8c41fdc..2a212b0 100644
  
  	HDMI_WRITE(VC4_HDMI_TX_PHY_RESET_CTL, 0);
  }
+diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
+index 1473df9..5ddc5d9 100644
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -144,6 +144,7 @@ static int vc4_atomic_commit(struct drm_device *dev,
+ 	 * current layout.
+ 	 */
+ 
++	async=0;
+ 	if (async) {
+ 		vc4_queue_seqno_cb(dev, &c->cb, wait_seqno,
+ 				   vc4_atomic_complete_commit_seqno_cb);
