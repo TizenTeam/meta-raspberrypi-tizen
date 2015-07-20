@@ -31,3 +31,11 @@ GALLIUMDRIVERSTIZEN_append_raspberrypi2 = ",vc4"
 GALLIUMDRIVERSTIZEN_LLVM33 = ""
 GALLIUMDRIVERSTIZEN_LLVM33_ENABLED = "${@base_version_less_or_equal('MESA_LLVM_RELEASE', '3.2', False, len('${GALLIUMDRIVERSTIZEN_LLVM33}') > 0, d)}"
 GALLIUMDRIVERSTIZEN_LLVM = "svga,"
+
+# Those packages actually don't exist on mesa 10.6
+ALLOW_EMPTY_libgbm-gallium = "1"
+ALLOW_EMPTY_libegl-gallium = "1"
+ALLOW_EMPTY_mesa-driver-pipe-swrast = "1"
+ALLOW_EMPTY_mesa-driver-pipe-vmwgfx = "1"
+
+PACKAGES =+ "mesa-driver-pipe-swrast mesa-driver-pipe-vmwgfx"
