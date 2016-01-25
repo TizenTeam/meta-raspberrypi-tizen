@@ -10,10 +10,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
-SRC_URI = "http://www.open.com.au/mikem/bcm2835/bcm2835-${PV}.tar.gz"
+SRC_URI = "http://www.airspayce.com/mikem/bcm2835/bcm2835-${PV}.tar.gz"
 
-SRC_URI[md5sum] = "22d431f7402b9c7f93baef348a459cb1"
-SRC_URI[sha256sum] = "90c993559ea273ae2e0587f6b815f7c80f19f47ee7f8aa7799b883f975196dbe"
+SRC_URI[md5sum] = "3a40c01ee7d81fbff80c54fbe1a351b5"
+SRC_URI[sha256sum] = "fc6b0412525e6b7e85aeffec67e2d01a99fb906346620041e6684d59ea5517a7"
 
 inherit autotools
 

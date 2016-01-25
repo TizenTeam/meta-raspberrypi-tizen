@@ -1,4 +1,5 @@
 inherit image_types
+inherit linux-raspberrypi-base
 
 #
 # Create an image that can by written onto a SD card using dd.
@@ -13,14 +14,14 @@ inherit image_types
 #                                                     Default Free space = 1.3x
 #                                                     Use IMAGE_OVERHEAD_FACTOR to add more space
 #                                                     <--------->
-#            4MiB              20MiB           SDIMG_ROOTFS
+#            4MiB              40MiB           SDIMG_ROOTFS
 # <-----------------------> <----------> <---------------------->
 #  ------------------------ ------------ ------------------------
 # | IMAGE_ROOTFS_ALIGNMENT | BOOT_SPACE | ROOTFS_SIZE            |
 #  ------------------------ ------------ ------------------------
 # ^                        ^            ^                        ^
 # |                        |            |                        |
-# 0                      4MiB     4MiB + 20MiB       4MiB + 20Mib + SDIMG_ROOTFS
+# 0                      4MiB     4MiB + 40MiB       4MiB + 40Mib + SDIMG_ROOTFS
 
 # This image depends on the rootfs image
 IMAGE_TYPEDEP_rpi-sdimg = "${SDIMG_ROOTFS_TYPE}"
@@ -39,7 +40,7 @@ SDIMG_KERNELIMAGE_raspberrypi2 ?= "kernel7.img"
 BOOTDD_VOLUME_ID ?= "${MACHINE}"
 
 # Boot partition size [in KiB] (will be rounded up to IMAGE_ROOTFS_ALIGNMENT)
-BOOT_SPACE ?= "20480"
+BOOT_SPACE ?= "40960"
 
 # Set alignment to 4MB [in KiB]
 IMAGE_ROOTFS_ALIGNMENT = "4096"
@@ -70,11 +71,6 @@ SDIMG = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.rpi-sdimg"
 # Additional files and/or directories to be copied into the vfat partition from the IMAGE_ROOTFS.
 FATPAYLOAD ?= ""
 
-# Device Tree Overlays are assumed to be suffixed by '-overlay.dtb' string and will be put in a dedicated folder
-DT_ALL = "${@d.getVar('KERNEL_DEVICETREE', True) or ''}"
-DT_OVERLAYS = "${@oe.utils.str_filter('\S+\-overlay\.dtb$', '${DT_ALL}', d)}"
-DT_ROOT = "${@oe.utils.str_filter_out('\S+\-overlay\.dtb$', '${DT_ALL}', d)}"
-
 IMAGEDATESTAMP = "${@time.strftime('%Y.%m.%d',time.gmtime())}"
 
 IMAGE_CMD_rpi-sdimg () {
@@ -82,13 +78,12 @@ IMAGE_CMD_rpi-sdimg () {
 	# Align partitions
 	BOOT_SPACE_ALIGNED=$(expr ${BOOT_SPACE} + ${IMAGE_ROOTFS_ALIGNMENT} - 1)
 	BOOT_SPACE_ALIGNED=$(expr ${BOOT_SPACE_ALIGNED} - ${BOOT_SPACE_ALIGNED} % ${IMAGE_ROOTFS_ALIGNMENT})
-	ROOTFS_SIZE=`du -bks ${SDIMG_ROOTFS} | awk '{print $1}'`
-        # Round up RootFS size to the alignment size as well
-	ROOTFS_SIZE_ALIGNED=$(expr ${ROOTFS_SIZE} + ${IMAGE_ROOTFS_ALIGNMENT} - 1)
-	ROOTFS_SIZE_ALIGNED=$(expr ${ROOTFS_SIZE_ALIGNED} - ${ROOTFS_SIZE_ALIGNED} % ${IMAGE_ROOTFS_ALIGNMENT})
-	SDIMG_SIZE=$(expr ${IMAGE_ROOTFS_ALIGNMENT} + ${BOOT_SPACE_ALIGNED} + ${ROOTFS_SIZE_ALIGNED})
+	SDIMG_SIZE=$(expr ${IMAGE_ROOTFS_ALIGNMENT} + ${BOOT_SPACE_ALIGNED} + $ROOTFS_SIZE)
 
-	echo "Creating filesystem with Boot partition ${BOOT_SPACE_ALIGNED} KiB and RootFS ${ROOTFS_SIZE_ALIGNED} KiB"
+	echo "Creating filesystem with Boot partition ${BOOT_SPACE_ALIGNED} KiB and RootFS $ROOTFS_SIZE KiB"
+
+	# Check if we are building with device tree support
+	DTS="${@get_dts(d, None)}"
 
 	# Initialize sdcard image file
 	dd if=/dev/zero of=${SDIMG} bs=1024 count=0 seek=${SDIMG_SIZE}
@@ -104,6 +99,7 @@ IMAGE_CMD_rpi-sdimg () {
 
 	# Create a vfat image with boot files
 	BOOT_BLOCKS=$(LC_ALL=C parted -s ${SDIMG} unit b print | awk '/ 1 / { print substr($4, 1, length($4 -1)) / 512 /2 }')
+	rm -f ${WORKDIR}/boot.img
 	mkfs.vfat -n "${BOOTDD_VOLUME_ID}" -S 512 -C ${WORKDIR}/boot.img $BOOT_BLOCKS
 	mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/bcm2835-bootfiles/* ::/
 	case "${KERNEL_IMAGETYPE}" in
@@ -112,7 +108,11 @@ IMAGE_CMD_rpi-sdimg () {
 		mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}${KERNEL_INITRAMFS}-${MACHINE}.bin ::uImage
 		;;
 	*)
-		if test -n "${KERNEL_DEVICETREE}"; then
+		if test -n "${DTS}"; then
+			# Device Tree Overlays are assumed to be suffixed by '-overlay.dtb' string and will be put in a dedicated folder
+			DT_OVERLAYS="${@split_overlays(d, 0)}"
+			DT_ROOT="${@split_overlays(d, 1)}"
+
 			# Copy board device trees to root folder
 			for DTB in ${DT_ROOT}; do
 				DTB_BASE_NAME=`basename ${DTB} .dtb`

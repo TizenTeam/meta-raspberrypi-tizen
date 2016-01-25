@@ -5,7 +5,7 @@ SECTION = "bootloader"
 
 DEPENDS = "python"
 
-SRCREV = "b9d7a8ac626e377577aa6900da5c5a965cafb66c"
+SRCREV = "f5642106425d430e1f82ee064121a5fd0e05a386"
 SRC_URI = " \
     git://github.com/raspberrypi/tools.git;branch=master;protocol=git \
     file://License \

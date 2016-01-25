@@ -1,4 +1,5 @@
 require linux.inc
+inherit linux-raspberrypi-base
 
 DESCRIPTION = "Linux Kernel for Raspberry Pi"
 SECTION = "kernel"
@@ -11,7 +12,8 @@ SRC_URI += " \
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
-PV = "${LINUX_VERSION}+git${SRCREV}"
+PE = "1"
+PV = "${LINUX_VERSION}+git${SRCPV}"
 
 # NOTE: For now we pull in the default config from the RPi kernel GIT tree.
 KERNEL_DEFCONFIG_raspberrypi ?= "bcmrpi_defconfig"
@@ -20,13 +22,17 @@ KERNEL_DEFCONFIG_raspberrypi2 ?= "bcm2709_defconfig"
 # CMDLINE for raspberrypi
 CMDLINE = "dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 init=/lib/systemd/systemd rw rootwait"
 
+# Add the kernel debugger over console kernel command line option if enabled
+CMDLINE_append = ' ${@base_conditional("ENABLE_KGDB", "1", "kgdboc=ttyAMA0,115200", "", d)}'
+
 UDEV_GE_141 ?= "1"
 
 # Set programmatically some variables during recipe parsing
 # See http://www.yoctoproject.org/docs/current/bitbake-user-manual/bitbake-user-manual.html#anonymous-python-functions
 python __anonymous () {
     kerneltype = d.getVar('KERNEL_IMAGETYPE', True)
-    kerneldt = d.getVar('KERNEL_DEVICETREE', True)
+    kerneldt = get_dts(d, d.getVar('LINUX_VERSION', True))
+    d.setVar("KERNEL_DEVICETREE", kerneldt)
 
     # Add dependency to 'rpi-mkimage-native' package only if RPi bootloader is used with DT-enable kernel
     if kerneldt:

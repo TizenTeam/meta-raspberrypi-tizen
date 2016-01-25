@@ -1,3 +1,3 @@
 require pi-blaster.inc
 
-SRCREV = "177cef81774d6df5c6284c198ff818515281db14"
+SRCREV = "ec5e1b4c6191d8f9a538497dbbb86f9cf0de7016"
